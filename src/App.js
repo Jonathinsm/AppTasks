@@ -6,21 +6,18 @@ import Navigation from './components/Navigation';
 import Taskform from './components/Taskform';
 import Tasks from './components/Tasks';
 
-import {todos} from './todos.json';
+import { todosRef } from './config/db'
 
 class App extends Component {
   constructor(){
       super();
       this.state = {
-        todos
       }
       this.handleAddTodo = this.handleAddTodo.bind(this);
   }
 
   handleAddTodo(todo) {
-    this.setState({
-      todos:[...this.state.todos, todo]
-    })
+    todosRef.push().set(todo)
   }
 
   render() {
