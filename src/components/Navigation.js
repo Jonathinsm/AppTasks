@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 
 import { todosRef } from '../config/db'
-import {todos} from '../todos.json';
 
 class Navigation extends Component{
   constructor(){
@@ -25,6 +24,18 @@ class Navigation extends Component{
         priority: snap.val().priority
       })
       this.setState({todos});
+    })
+
+    todosRef.on('child_removed', snap => {
+      let todo = {
+        todoid: snap.key,
+        title: snap.val().title,
+        responsible: snap.val().responsible,
+        description: snap.val().description,
+        priority: snap.val().priority
+      };
+      let todos = this.state.todos.filter((i)=> todo.todoid !== i.todoid)
+      this.setState({todos})
     })
   }
 

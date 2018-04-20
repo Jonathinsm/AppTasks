@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import { todosRef } from '../config/db'
+
 class Taskform extends Component{
   constructor(){
     super();
@@ -22,7 +24,7 @@ handleInput(e){
 
 handleSubmit(e){
   e.preventDefault();
-  this.props.onAddTodo(this.state);
+  todosRef.push().set(this.state)
 }
 
   render(){

@@ -21,19 +21,28 @@ class Tasks extends Component{
         title: snap.val().title,
         responsible: snap.val().responsible,
         description: snap.val().description,
+        estado: snap.val().estado,
         priority: snap.val().priority
       })
       this.setState({todos});
     })
 
     todosRef.on('child_removed', snap => {
-      for(let i=0; i<todos.length; i++){
-        if(todos[i].todoid = snap.key){
-          todos.splice(i, 1);
-        }
-      }
+      let todo = {
+        todoid: snap.key,
+        title: snap.val().title,
+        responsible: snap.val().responsible,
+        description: snap.val().description,
+        priority: snap.val().priority
+      };
+
+      let todos = this.state.todos.filter((i)=> todo.todoid !== i.todoid)
       this.setState({todos})
     })
+  }
+
+  updateTodo(){
+
   }
 
   removeTodo(index){
@@ -52,14 +61,14 @@ class Tasks extends Component{
               <div className="col-md-4" key={todo.todoid}>
                 <div className="card m-2">
                   <div className="card-title text-center">
-                    <h1>{todo.responsible}</h1>
                     <h3>{todo.title}</h3>
                     <span className="badge badge-pill badge-danger ml-2">
                       {todo.priority}
                     </span>
                   </div>
                   <div className="card-body">
-                    {todo.description}
+                    <p>{todo.description}</p>
+                    <p><mark>{todo.responsible}</mark></p>
                   </div>
                   <div className="card-footer">
                     <button
