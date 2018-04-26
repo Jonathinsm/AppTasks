@@ -18,7 +18,7 @@ class App extends Component {
                 <img src={logo} className="App-logo" alt="logo" />
                 <Taskform/>
             </div>
-            <div className="col-md-8 backnotes">
+            <div className="col-md-8">
               <Tasks/>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import { todosRef } from '../config/db'
+import { todosRef, manageTaskItems } from '../config/db'
 
 class Navigation extends Component{
   constructor(){
@@ -13,29 +13,12 @@ class Navigation extends Component{
   }
 
   componentDidMount(){
-    const { todos } = this.state;
+    todosRef.on('value', snap => this.manageItemsList(snap));
+  }
 
-    todosRef.on('child_added', snap => {
-      todos.push({
-        todoid: snap.key,
-        title: snap.val().title,
-        responsible: snap.val().responsible,
-        description: snap.val().description,
-        priority: snap.val().priority
-      })
-      this.setState({todos});
-    })
-
-    todosRef.on('child_removed', snap => {
-      let todo = {
-        todoid: snap.key,
-        title: snap.val().title,
-        responsible: snap.val().responsible,
-        description: snap.val().description,
-        priority: snap.val().priority
-      };
-      let todos = this.state.todos.filter((i)=> todo.todoid !== i.todoid)
-      this.setState({todos})
+  manageItemsList(snapshot){
+    this.setState({
+      todos:manageTaskItems(snapshot)
     })
   }
 

@@ -6,25 +6,23 @@ class Taskform extends Component{
   constructor(){
     super();
     this.state = {
-      title: '',
-      responsible: '',
-      description: '',
-      priority: 'low'
+
     }
-    this.handleInput = this.handleInput.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.saveTask = this.saveTask.bind(this);
   }
 
-handleInput(e){
-  const {value, name} = e.target;
-  this.setState({
-    [name]: value
-  })
-}
-
-handleSubmit(e){
+saveTask(e){
   e.preventDefault();
-  todosRef.push().set(this.state)
+  todosRef.push().set({
+    title: this.title.value,
+    responsible: this.responsible.value,
+    description: this.description.value,
+    priority: this.priority.value
+  })
+
+  this.title.value='';
+  this.responsible.value='';
+  this.description.value='';
 }
 
   render(){
@@ -34,42 +32,40 @@ handleSubmit(e){
           <div className="form-group">
             <input
               type="text"
-              name="title"
+              ref={input => {this.title = input;}}
               className="form-control"
-              onChange={this.handleInput}
               placeholder="Title"
               />
           </div>
           <div className="form-group">
             <input
               type="text"
-              name="responsible"
+              ref={input => {this.responsible = input;}}
               className="form-control"
-              onChange={this.handleInput}
               placeholder="Responsible"
               />
           </div>
           <div className="form-group">
             <input
               type="text"
-              name="description"
+              ref={input => {this.description = input;}}
               className="form-control"
-              onChange={this.handleInput}
               placeholder="Description"
               />
           </div>
           <div className="form-group">
             <select
-                name="priority"
+                ref={input => {this.priority = input;}}
                 className="form-control"
-                onChange={this.handleInput}
               >
               <option>low</option>
               <option>medium</option>
               <option>high</option>
             </select>
           </div>
-          <button type="submit" className="btn btn-primary">
+          <button
+            onClick={this.saveTask}
+            className="btn btn-primary">
             Save
           </button>
         </form>

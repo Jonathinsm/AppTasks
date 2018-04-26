@@ -1,43 +1,23 @@
 import React, {Component} from 'react';
 
-import { todosRef } from '../config/db'
+import { todosRef, manageTaskItems } from '../config/db'
 
 class Tasks extends Component{
   constructor(){
       super();
       this.state = {
         todos: [
-
         ]
       }
   }
 
   componentDidMount(){
-    const { todos } = this.state;
+    todosRef.on('value', snap => this.manageItemsList(snap));
+  }
 
-    todosRef.on('child_added', snap => {
-      todos.push({
-        todoid: snap.key,
-        title: snap.val().title,
-        responsible: snap.val().responsible,
-        description: snap.val().description,
-        estado: snap.val().estado,
-        priority: snap.val().priority
-      })
-      this.setState({todos});
-    })
-
-    todosRef.on('child_removed', snap => {
-      let todo = {
-        todoid: snap.key,
-        title: snap.val().title,
-        responsible: snap.val().responsible,
-        description: snap.val().description,
-        priority: snap.val().priority
-      };
-
-      let todos = this.state.todos.filter((i)=> todo.todoid !== i.todoid)
-      this.setState({todos})
+  manageItemsList(snapshot){
+    this.setState({
+      todos:manageTaskItems(snapshot)
     })
   }
 
@@ -56,9 +36,9 @@ class Tasks extends Component{
     return(
       <div className="row">
         {
-          this.state.todos.map((todo,i)=>{
+          this.state.todos.map((todo, index)=>{
             return(
-              <div className="col-md-4" key={todo.todoid}>
+              <div className="col-md-4" key={index}>
                 <div className="card m-2">
                   <div className="card-title text-center">
                     <h3>{todo.title}</h3>
@@ -73,7 +53,7 @@ class Tasks extends Component{
                   <div className="card-footer">
                     <button
                       className="btn btn-danger"
-                      onClick={this.removeTodo.bind(this, todo.todoid)}
+                      onClick={this.removeTodo.bind(this, todo.id)}
                       >
                       Delete
                     </button>
